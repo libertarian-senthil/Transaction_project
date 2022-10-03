@@ -2,6 +2,7 @@
 .venv
 dump
 SQL
+logs
 
 
 # Byte-compiled / optimized / DLL files
