@@ -7,7 +7,7 @@ import os
 from os.path import exists, join
 
 
-log_file_path = "transaction_software\\logs\\"
+log_file_path = os.getcwd()+"\\transaction_software\\logs\\"
 
 # Check for the existence of logs directory if not create one.
 if exists(log_file_path) is not True:
@@ -40,4 +40,4 @@ def database_error(msg:str,line_no:int)->None:
 
 # drive code
 if __name__=='__main__':
-    pass
+    database_error("senthil",123)
