@@ -4,14 +4,14 @@ This module is used to interact with the datbase and perform operations on the d
 import os
 import re
 import time
-from inspect import currentframe
+# from inspect import currentframe
 
 from mysql.connector import connect
 from mysql.connector.connection_cext import CMySQLConnection
 from mysql.connector.errors import ProgrammingError
 
 from utils.generate_rand_num import generate_account_number
-from utils.logs import database_error
+# from utils.logs import database_error
 from utils.sql_statements import (INSERT_CUSTOMER, REMOVE_ACC, SEARCH_ACC,
                                   SELECT_ALL_CUSOMTERS, SHOW_TABLES,
                                   UPDATE_ACC)
@@ -26,7 +26,8 @@ def check_if_mysql_is_installed()->None:
     Check for MySQL installation.
     """
     if os.system("mysql --version") == 1:
-        database_error(msg="MySQL is not installed", line_no = currentframe().f_lineno) #type: ignore
+        # database_error(msg="MySQL is not installed", line_no = currentframe().f_lineno) #type: ignore
+        print("Mysql is not installed on your system!")
 
 def connect_to_database()->object:
     """
@@ -45,9 +46,10 @@ def connect_to_database()->object:
     try:
         return connect(**config)
     except ProgrammingError as e:
-        if 'Unknown Database' in str(e):
-            database_error(msg=f"'{DB}' database doesn't exists",line_no = currentframe().f_lineno) #type: ignore
-            check_if_mysql_is_installed()
+        # if 'Unknown Database' in str(e):
+        #     database_error(msg=f"'{DB}' database doesn't exists",line_no = currentframe().f_lineno) #type: ignore
+        print("ERROR:",e)
+        check_if_mysql_is_installed()
 
 def is_email(email:str)->bool:
     """
@@ -170,6 +172,7 @@ def search_account_info(debit_account_number:int)->tuple[bool,list]:
     val = [debit_account_number]
     cursor.execute(SEARCH_ACC,val)
     customer = cursor.fetchone()
+    connection.close() # type:ignore
     if customer is not None:  # type: ignore
         return (True,customer)
     else:

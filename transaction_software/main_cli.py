@@ -76,8 +76,25 @@ def _display_main()->None:
                 acc_num = int(input("Enter account number: "))
                 flag, customer = search_account_info(acc_num)
                 if flag is not False:
-                    # print("\nAccount number: "customer[0],"\nAccount holder: ",customer[1],f"{customer[1]}'s gender: ",customer[2],"")
-                    pass
+                    print(f"""
+Account holder's details
+
+Account number        : {customer[0]}
+Account holder        : {customer[1]}
+{customer[1]}'s gender      : {customer[2]}
+Address               : {customer[3]}
+Contact number        : {customer[4]}
+E-mail                : {customer[5]}
+Aadhar number         : {customer[6]}
+Account type          : {customer[7]}
+Account status        : {customer[8]}
+Account balance       : {customer[9]}
+""")
+                    choice = input("To go back to main menu press Y or N to exit the program: ").capitalize()
+                    if choice == "Y":
+                        continue
+                    elif choice == "N":
+                        break
                 else:
                     print("No customers found!")
             elif user_choice == 6:
