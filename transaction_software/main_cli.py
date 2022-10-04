@@ -3,8 +3,9 @@ Main command line interface to interact with the user and the software. All the 
 """
 
 import os
-
-from utils.database import create_account
+import time
+from database import create_account, is_email
+from utils.generate_rand_num import generate_account_number
 
 def _display_main()->None:
     """
@@ -26,25 +27,51 @@ def _display_main()->None:
 6. View Customer's List.
 7. Exit.
 """)
-        user_choice = int(input("Please Enter your choice: "))
-        if user_choice == 1: # Create Account.
-            create_account()
-        elif user_choice == 2:
-            
-            pass
-        elif user_choice == 3:
-            pass
-        elif user_choice == 4:
-            pass
-        elif user_choice == 5:
-            pass
-        elif user_choice == 6:
-            pass
-        elif user_choice == 7: # exit the program
-            print("\nProgram terminated...\n")
-            break
-        else:
-            print("Invalid Choice...")
+        try:
+            user_choice = int(input("Please Enter your choice: "))
+            # Create Account.
+            if user_choice == 1:
+                # Get and Check email.
+                email = input("Enter email: ")
+                if is_email(email) is False:
+                    print("Entered invalid email")
+                    time.sleep(3.0)
+                    continue
+
+                debit_account_number = generate_account_number()
+                user_name = input("Enter user_name: ")
+                gender = input("Enter gender(M/F): ").capitalize()
+                if gender not in ["M","F"]:
+                    print("Invalid gender input")
+                    time.sleep(3.0)
+                    continue
+                address = input("Enter address: ")
+                phone_number = int(input("Enter phone_number: "))
+                aadhar_number = int(input("Enter aadhar_number: "))
+                account_type = input("Enter account_type: "),
+                balance = int(input("Enter account balance: "))
+                create_account(debit_account_number, user_name, gender, address, phone_number,email, aadhar_number, account_type, balance) #type: ignore
+                break
+            elif user_choice == 2:
+                pass
+            elif user_choice == 3:
+                pass
+            elif user_choice == 4:
+                pass
+            elif user_choice == 5:
+                pass
+            elif user_choice == 6:
+                pass
+            elif user_choice == 7: # exit the program
+                print("\nProgram terminated...\n")
+                break
+            else:
+                print("Invalid Choice...")
+        except ValueError as e:
+            print("Invalid input",e)
+            time.sleep(3.0)
+
+
 
 
 if __name__ == "__main__":
