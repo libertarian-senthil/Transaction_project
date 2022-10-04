@@ -4,7 +4,7 @@ Main command line interface to interact with the user and the software. All the 
 
 import os
 import time
-from database import create_account, is_email, remove_account, search_account_info
+from database import create_account, is_email, remove_account, search_account_info, update_account_info3
 from utils.generate_rand_num import generate_account_number
 from mysql.connector.errors import IntegrityError
 
@@ -53,23 +53,30 @@ def _display_main()->None:
                 balance = int(input("Enter account balance: "))
                 create_account(debit_account_number, user_name, gender, address, phone_number,email, aadhar_number, account_type, balance) #type: ignore
                 print("Account created successfully...")
-                break
+                time.sleep(3.0)
+                continue
             elif user_choice == 2:
                 pass
             elif user_choice == 3:
-                pass
+                acc_num = int(input("Enter Account number: "))
+                update_account_info(acc_num)
+                print("Account updated successfully...")
+                time.sleep(3.0)
+                continue
+
             # Delete an account
             elif user_choice == 4:
                 account_number = int(input("Enter the account number: "))
                 remove_account(account_number)
                 print("Account removed successfully...")
-                break
+                time.sleep(3.0)
+                continue
             # Search account information
             elif user_choice == 5:
                 acc_num = int(input("Enter account number: "))
                 flag, customer = search_account_info(acc_num)
                 if flag is not False:
-                    print("\nAccount number: "customer[0],"\nAccount holder: ",customer[1],f"{customer[1]}'s gender: ",customer[2],"")
+                    # print("\nAccount number: "customer[0],"\nAccount holder: ",customer[1],f"{customer[1]}'s gender: ",customer[2],"")
                     pass
                 else:
                     print("No customers found!")

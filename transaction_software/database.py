@@ -3,21 +3,18 @@ This module is used to interact with the datbase and perform operations on the d
 """
 import os
 import re
+import time
 from inspect import currentframe
 
 from mysql.connector import connect
-from mysql.connector.errors import ProgrammingError
 from mysql.connector.connection_cext import CMySQLConnection
+from mysql.connector.errors import ProgrammingError
 
-from utils.logs import database_error
 from utils.generate_rand_num import generate_account_number
-from utils.sql_statements import (
-    SHOW_TABLES,
-    SELECT_ALL_CUSOMTERS,
-    INSERT_CUSTOMER,
-    REMOVE_ACC,
-    SEARCH_ACC
-)
+from utils.logs import database_error
+from utils.sql_statements import (INSERT_CUSTOMER, REMOVE_ACC, SEARCH_ACC,
+                                  SELECT_ALL_CUSOMTERS, SHOW_TABLES,
+                                  UPDATE_ACC)
 
 # Get the database username and password stored in the environment variables.
 DB_USER = os.getenv('DB_USER')
@@ -114,8 +111,28 @@ def perform_transaction()->None:
     pass
 
 # Update the account information.
-def update_account_info()->None:
-    pass
+def update_account_info(debit_account_number)->None:
+    u_name = input("Enter username: ")
+    gender = input("Enter Gender(M/F): ")
+    addr = input("Enter address: ")
+    phone_number = input("Enter phone number: ")
+    aadhar = input("Enter aadhar number: ")
+    while True:
+        email = input("Enter E-Mail: ")
+        if is_email(email) is False:
+                    print("Entered invalid email")
+                    time.sleep(3.0)
+                    continue
+        else:
+            break
+    connection = connect_to_database()
+    cursor= connection.cursor()
+    val= (u_name, gender, addr,phone_number, email, aadhar,debit_account_number)
+    cursor.execute(UPDATE_ACC,val)
+    connection.commit() # type:ignore
+    connection.close() # type:ignore
+
+
 
 # delete an account information.
 def remove_account(debit_account_number:int)->None:

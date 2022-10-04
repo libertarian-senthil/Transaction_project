@@ -9,3 +9,4 @@ INSERT_CUSTOMER = "INSERT INTO customer(debit_account_number, user_name, gender,
 REMOVE_ACC = "DELETE FROM customer where debit_account_number = %s"
 
 SEARCH_ACC = "SELECT * FROM customer where debit_account_number = %s"
+UPDATE_ACC = "UPDATE customer SET user_name = %s, gender = %s, address = %s, phone_number = %s, email =  %s, aadhar_number =%s where debit_account_number = %s"
