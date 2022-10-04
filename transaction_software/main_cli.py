@@ -48,7 +48,7 @@ def _display_main()->None:
                 address = input("Enter address: ")
                 phone_number = int(input("Enter phone_number: "))
                 aadhar_number = int(input("Enter aadhar_number: "))
-                account_type = input("Enter account_type: "),
+                account_type = input("Enter account_type: ")
                 balance = int(input("Enter account balance: "))
                 create_account(debit_account_number, user_name, gender, address, phone_number,email, aadhar_number, account_type, balance) #type: ignore
                 break
