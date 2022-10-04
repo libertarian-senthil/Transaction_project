@@ -126,7 +126,7 @@ def update_account_info(debit_account_number)->None:
         else:
             break
     connection = connect_to_database()
-    cursor= connection.cursor()
+    cursor= connection.cursor() #type: ignore
     val= (u_name, gender, addr,phone_number, email, aadhar,debit_account_number)
     cursor.execute(UPDATE_ACC,val)
     connection.commit() # type:ignore
