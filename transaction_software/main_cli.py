@@ -4,8 +4,9 @@ Main command line interface to interact with the user and the software. All the 
 
 import os
 import time
-from database import create_account, is_email
+from database import create_account, is_email, remove_account
 from utils.generate_rand_num import generate_account_number
+from mysql.connector.errors import IntegrityError
 
 def _display_main()->None:
     """
@@ -51,13 +52,18 @@ def _display_main()->None:
                 account_type = input("Enter account_type: ")
                 balance = int(input("Enter account balance: "))
                 create_account(debit_account_number, user_name, gender, address, phone_number,email, aadhar_number, account_type, balance) #type: ignore
+                print("Account created successfully...")
                 break
             elif user_choice == 2:
                 pass
             elif user_choice == 3:
                 pass
+            # Delete an account
             elif user_choice == 4:
-                pass
+                account_number = int(input("Enter the account number: "))
+                remove_account(account_number)
+                print("Account removed successfully...")
+                break
             elif user_choice == 5:
                 pass
             elif user_choice == 6:
@@ -68,8 +74,10 @@ def _display_main()->None:
             else:
                 print("Invalid Choice...")
         except ValueError as e:
-            print("Invalid input",e)
+            print("Invalid input\nError message:",e)
             time.sleep(3.0)
+        except IntegrityError as e:
+            print("Already an account exists\nError message:",e)
 
 
 

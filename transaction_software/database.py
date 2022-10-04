@@ -14,7 +14,8 @@ from utils.generate_rand_num import generate_account_number
 from utils.sql_statements import (
     SHOW_TABLES,
     SELECT_ALL_CUSOMTERS,
-    INSERT_CUSTOMER
+    INSERT_CUSTOMER,
+    REMOVE_ACC
 )
 
 # Get the database username and password stored in the environment variables.
@@ -46,12 +47,6 @@ def connect_to_database():
             database_error(msg=f"'{DB}' database doesn't exists",line_no = currentframe().f_lineno) #type: ignore
             check_if_mysql_is_installed()
 
-def disconnect_database(connection)->None:
-    """
-    Close the connection with boi Database.
-    """
-    connection.close()
-
 def is_email(email:str)->bool:
     """
     Return True if it is email else return false.
@@ -77,7 +72,7 @@ def create_account(debit_account_number:int, user_name:str, gender:str,    addre
     cursor = connection.cursor() # type:ignore
     cursor.execute(INSERT_CUSTOMER,val)
     connection.commit() # type:ignore
-
+    connection.close() # type:ignore
 # perform transaction between two account.
 def perform_transaction()->None:
     pass
@@ -87,8 +82,15 @@ def update_account_info()->None:
     pass
 
 # delete an account information.
-def remove_account()->None:
-    pass
+def remove_account(debit_account_number:int)->None:
+    """ Remove a bank account by using the debit_account_number"""
+    connection = connect_to_database()
+    cursor = connection.cursor() #type:ignore
+    val = [debit_account_number]
+    cursor.execute(REMOVE_ACC,val)
+    connection.commit() #type:ignore
+    connection.close() #type:ignore
+
 
 # Search account.
 def search_account_info()->None:
@@ -102,4 +104,4 @@ def view_customer_list()->None:
 
 # drive code
 if __name__ == "__main__":
-    pass
+    remove_account(1131201234567890)
