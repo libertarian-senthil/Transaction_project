@@ -4,7 +4,7 @@ Main command line interface to interact with the user and the software. All the 
 
 import os
 import time
-from database import create_account, is_email, remove_account, search_account_info, update_account_info3
+from database import create_account, is_email, remove_account, search_account_info, update_account_info
 from utils.generate_rand_num import generate_account_number
 from mysql.connector.errors import IntegrityError
 
