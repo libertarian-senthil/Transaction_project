@@ -4,17 +4,20 @@ This module is used to interact with the datbase and perform operations on the d
 import os
 import re
 import time
-# from inspect import currentframe
 
 from mysql.connector import connect
 from mysql.connector.connection_cext import CMySQLConnection
-from mysql.connector.errors import ProgrammingError
+from mysql.connector.errors import DatabaseError, ProgrammingError,IntegrityError
 
 from utils.generate_rand_num import generate_account_number
 # from utils.logs import database_error
 from utils.sql_statements import (INSERT_CUSTOMER, REMOVE_ACC, SEARCH_ACC,
-                                  SELECT_ALL_CUSOMTERS, SHOW_TABLES,
-                                  UPDATE_ACC)
+                                  SEARCH_ACC_WITH_UPI, SELECT_ALL_CUSOMTERS,
+                                  SHOW_TABLES, UPDATE_ACC)
+
+# from inspect import currentframe
+
+
 
 # Get the database username and password stored in the environment variables.
 DB_USER = os.getenv('DB_USER')
@@ -78,7 +81,53 @@ def is_email(email:str)->bool:
 # update_account_info()
 # view_customer_list()
 
-def create_account(debit_account_number:int, user_name:str, gender:str,    address:str, phone_number:str, email:str, aadhar_number:str,    account_type:str, balance:int, account_status:str = "active",*args, **kwargs)->bool:
+# Search account.
+def search_account_info(debit_account_number, upi_password=None, upi_match=False):
+    """Search account details and return a tuple of boolean(account is found) and list(customer details. if no detail exists return empty list)
+
+    Args:
+        debit_account_number (int): the account number.
+        upi_password (None): default is None.
+        upi_match (bool): default is False.
+
+
+    Returns:
+        tuple[bool,list,bool]: tuple of bool,list and bool.
+            bool =  account found(True) or not found(False).
+            list = represent the customer details.
+            int = represent whether the given upi_password is a match(1) ot not(0). if upi_match is set to None then (-1).
+                codes:
+                    code 1 = found a match.
+                    code 0 = not found a match.
+                    code -1 = upi_match is False
+                    code -2 = upi_match is True and upi_password is None.
+    """
+    connection = connect_to_database()
+    cursor = connection.cursor() #type:ignore
+    if upi_match is False:
+        val = [debit_account_number]
+        cursor.execute(SEARCH_ACC,val)
+        customer = cursor.fetchone()
+        connection.close() # type:ignore
+        if customer is not None:  # type: ignore
+            return (True,customer,-1)
+        else:
+            return (False, [],-1)
+    elif upi_match is True and upi_password is None:
+        return(False,[],-2)
+    elif upi_match is True and upi_password is not None:
+        val = [debit_account_number,upi_password]
+        cursor.execute(SEARCH_ACC_WITH_UPI,val)
+        customer = cursor.fetchone()
+        connection.close() # type:ignore
+        if customer is not None:  # type: ignore
+            return (True,customer,1)
+        else:
+            return (False, [],0)
+    else:
+        print("ERROR: In database.py Check search_account_info()")
+
+def create_account(**kwargs)->int:
     """Create an account.
 
     Args:
@@ -94,71 +143,67 @@ def create_account(debit_account_number:int, user_name:str, gender:str,    addre
         account_status (str, optional): status of the account either active or inactive, Defaults to "active".
 
     Returns:
-        bool: True if account created else false
+        int: 1 for created, 0 for not created, -1 for already an account found.
     """
     try:
-        val= [debit_account_number, user_name, gender, address, phone_number, email, aadhar_number,account_type, balance, account_status]
+        # INSERT_CUSTOMER = "INSERT INTO customer(debit_account_number, user_name, gender, address, phone_number, email, aadhar_number, account_type, balance, account_status, upi_password) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        data = kwargs
+        # val= [data['debit_account_number'], data['user_name'], data['gender'], data['address'], data['phone_number'], data['email'], data['aadhar_number'],data['account_type'], balance, account_status]
 
         connection = connect_to_database()
         cursor = connection.cursor() # type:ignore
+        val = [data["debit_account_number"], data["user_name"], data["gender"], data["address"], data["phone_number"], data["email"], data["aadhar_number"], data["account_type"], data["balance"], data["account_status"], data["upi_password"]]
         cursor.execute(INSERT_CUSTOMER,val)
         connection.commit() # type:ignore
         connection.close() # type:ignore
-        return True
-    except:
-        return False
+        return 1
+    except ProgrammingError as e:
+        return 0
+    except IntegrityError as e:
+        return -1
+    except DatabaseError as e:
+        return 0
+
+
 
 # perform transaction between two account.
 def perform_transaction()->None:
     pass
 
 # delete an account information.
-def remove_account(debit_account_number:int)->bool:
+def remove_account(debit_account_number:int, upi_password:str):  # type: ignore
     """Remove an account
 
     Args:
         debit_account_number (int): the account number.
 
     Returns:
-        bool: True if account removed else false.
+        tuple(bool, int):
+            bool = True if account removed else false.
+            int = 1 if upi_password is correct, 0 if wrong, -1 if error occured.
     """
     try:
         connection = connect_to_database()
         cursor = connection.cursor() #type:ignore
-        val = [debit_account_number]
+        val = [debit_account_number, upi_password]
         cursor.execute(REMOVE_ACC,val)
+        customer_found, customer,password_match_code = search_account_info(debit_account_number,upi_match=True, upi_password=upi_password)  # type: ignore
         connection.commit() #type:ignore
         connection.close() #type:ignore
-        return True
+        if password_match_code == -1:
+            return(False, 0)
+        elif password_match_code == 1:
+            return(True, 1)
     except:
-        return False
-
-# Search account.
-def search_account_info(debit_account_number:int)->tuple[bool,list]:
-    """Search account details and return a tuple of boolean(account is found) and list(customer details. if no detail exists return empty list)
-
-    Args:
-        debit_account_number (int): the account number.
-
-    Returns:
-        tuple[bool,list]: tuple of bool and list. bool represent account found(True) or not found(False) and list represent the customer details.
-    """
-    connection = connect_to_database()
-    cursor = connection.cursor() #type:ignore
-    val = [debit_account_number]
-    cursor.execute(SEARCH_ACC,val)
-    customer = cursor.fetchone()
-    connection.close() # type:ignore
-    if customer is not None:  # type: ignore
-        return (True,customer)
-    else:
-        return (False, [])
-
-
+        return (False, -1)
 
 # def View customer list.
-def view_customer_list()->None:
-    pass
+def view_customer_list():
+    connection = connect_to_database()
+    cursor = connection.cursor() # type: ignore
+    cursor.execute(SELECT_ALL_CUSOMTERS)
+    customers_list = cursor.fetchall()
+    return customers_list
 
 # Update the account information.
 def update_account_info(**kwargs)->bool:
