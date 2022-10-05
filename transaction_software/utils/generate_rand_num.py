@@ -1,3 +1,6 @@
+"""
+This module generates random account number and transaction id.
+"""
 import random
 import math
 

@@ -49,7 +49,7 @@ def _display_main()->None:
                 address = input("Enter address: ")
                 phone_number = int(input("Enter phone_number: "))
                 aadhar_number = int(input("Enter aadhar_number: "))
-                account_type = input("Enter account_type: ")
+                account_type = input("Enter account_type(savings/current): ")
                 balance = int(input("Enter account balance: "))
                 create_account(debit_account_number, user_name, gender, address, phone_number,email, aadhar_number, account_type, balance) #type: ignore
                 print("Account created successfully...")
@@ -57,12 +57,45 @@ def _display_main()->None:
                 continue
             elif user_choice == 2:
                 pass
+
+            # Update an Acccount Information.
             elif user_choice == 3:
-                acc_num = int(input("Enter Account number: "))
-                update_account_info(acc_num)
-                print("Account updated successfully...")
-                time.sleep(3.0)
-                continue
+                debit_account_number = int(input("Enter Account number: "))
+                flag, customer = search_account_info(debit_account_number)
+                if flag is not False: # acccount is found logic.
+                    user_name = input("Enter username: ")
+                    gender = input("Enter Gender(M/F): ")
+                    address = input("Enter address: ")
+                    phone_number = input("Enter phone number: ")
+                    aadhar_number = input("Enter aadhar number: ")
+                    while True:
+                        email = input("Enter E-Mail: ")
+                        if is_email(email) is False:
+                                    print("Entered invalid email!")
+                                    time.sleep(3.0)
+                                    continue
+                        else:
+                            break
+                    data = {
+                        "user_name"           : user_name,
+                        "gender"              : gender,
+                        "address"             : address,
+                        "phone_number"        : phone_number,
+                        "email"               : email,
+                        "aadhar_number"       : aadhar_number,
+                        "debit_account_number": debit_account_number
+                    }
+                    update_status = update_account_info(**data)
+                    if update_status == True:
+                        print("Account updated successfully...")
+                        time.sleep(3.0)
+                        continue
+                    else:
+                        print(f"ERROR: Updation failed!",)
+                else:
+                    print(f"INFO: {debit_account_number} account is not found!\n updation failed!")
+                    time.sleep(3.0)
+                    continue
 
             # Delete an account
             elif user_choice == 4:
@@ -81,19 +114,20 @@ Account holder's details
 
 Account number        : {customer[0]}
 Account holder        : {customer[1]}
-{customer[1]}'s gender      : {customer[2]}
+Gender                : {customer[2]}
 Address               : {customer[3]}
 Contact number        : {customer[4]}
 E-mail                : {customer[5]}
 Aadhar number         : {customer[6]}
 Account type          : {customer[7]}
 Account status        : {customer[8]}
-Account balance       : {customer[9]}
+Account balance       : Rs.{customer[9]}/-
 """)
                     choice = input("To go back to main menu press Y or N to exit the program: ").capitalize()
                     if choice == "Y":
                         continue
                     elif choice == "N":
+                        print("Program terminated...")
                         break
                 else:
                     print("No customers found!")
