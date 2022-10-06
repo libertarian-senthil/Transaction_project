@@ -78,8 +78,6 @@ def is_email(email:str)->bool:
 
 # TODO: comple the functions
 # perfomr_transaction()
-# update_account_info()
-# view_customer_list()
 
 # Search account.
 def search_account_info(debit_account_number, upi_password=None, upi_match=False):
@@ -92,7 +90,7 @@ def search_account_info(debit_account_number, upi_password=None, upi_match=False
 
 
     Returns:
-        tuple[bool,list,bool]: tuple of bool,list and bool.
+        tuple[bool,list,int]: tuple of bool,list and bool.
             bool =  account found(True) or not found(False).
             list = represent the customer details.
             int = represent whether the given upi_password is a match(1) ot not(0). if upi_match is set to None then (-1).
@@ -205,6 +203,8 @@ def view_customer_list():
     customers_list = cursor.fetchall()
     return customers_list
 
+def check_balance():
+    pass
 # Update the account information.
 def update_account_info(**kwargs)->bool:
     """Update the account information

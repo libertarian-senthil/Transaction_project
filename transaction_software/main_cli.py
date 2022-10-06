@@ -70,7 +70,7 @@ def _display_main()->None:
                     "upi_password"        : upi_password
                 }
                 creation_status = create_account(**data)
-                if creation_status is True:
+                if creation_status is 1:
                     print("Account created successfully...")
                     time.sleep(3.0)
                     continue
