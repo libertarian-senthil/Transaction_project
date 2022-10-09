@@ -103,7 +103,7 @@ def _display_main()->None:
                         "user_name"           : user_name,
                         "gender"              : gender,
                         "address"             : address,
-                        "phone_number"        : phone_numgber,
+                        "phone_number"        : phone_number,
                         "email"               : email,
                         "aadhar_number"       : aadhar_number,
                         "debit_account_number": debit_account_number
