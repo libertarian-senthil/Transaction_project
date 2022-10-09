@@ -10,7 +10,6 @@ from mysql.connector.connection_cext import CMySQLConnection
 from mysql.connector.errors import DatabaseError, ProgrammingError,IntegrityError
 
 from utils.generate_rand_num import generate_account_number
-# from utils.logs import database_error
 from utils.sql_statements import (INSERT_CUSTOMER, REMOVE_ACC, SEARCH_ACC,
                                   SEARCH_ACC_WITH_UPI, SELECT_ALL_CUSOMTERS,
                                   SHOW_TABLES, UPDATE_ACC)
@@ -31,7 +30,6 @@ def check_if_mysql_is_installed()->bool:
         bool: True if installed else false.
     """
     if os.system("mysql --version") == 1:
-        # database_error(msg="MySQL is not installed", line_no = currentframe().f_lineno) #type: ignore
         print("Mysql is not installed on your system!")
         return False
     else:
@@ -54,8 +52,6 @@ def connect_to_database():
     try:
         return connect(**config)
     except ProgrammingError as e:
-        # if 'Unknown Database' in str(e):
-        #     database_error(msg=f"'{DB}' database doesn't exists",line_no = currentframe().f_lineno) #type: ignore
         print("ERROR:",e,"\n")
         is_mysql_installed = check_if_mysql_is_installed()
         return is_mysql_installed
@@ -144,10 +140,7 @@ def create_account(**kwargs)->int:
         int: 1 for created, 0 for not created, -1 for already an account found.
     """
     try:
-        # INSERT_CUSTOMER = "INSERT INTO customer(debit_account_number, user_name, gender, address, phone_number, email, aadhar_number, account_type, balance, account_status, upi_password) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         data = kwargs
-        # val= [data['debit_account_number'], data['user_name'], data['gender'], data['address'], data['phone_number'], data['email'], data['aadhar_number'],data['account_type'], balance, account_status]
-
         connection = connect_to_database()
         cursor = connection.cursor() # type:ignore
         val = [data["debit_account_number"], data["user_name"], data["gender"], data["address"], data["phone_number"], data["email"], data["aadhar_number"], data["account_type"], data["balance"], data["account_status"], data["upi_password"]]
