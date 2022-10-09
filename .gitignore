@@ -1,10 +1,12 @@
 # local system files
 .venv
-dump
-SQL
+private
+mysql
 logs
 .vscode
 DOCS/_*.md
+DOCS/_*.txt
+Data/_*.*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

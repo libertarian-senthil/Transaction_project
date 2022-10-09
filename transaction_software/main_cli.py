@@ -70,7 +70,7 @@ def _display_main()->None:
                     "upi_password"        : upi_password
                 }
                 creation_status = create_account(**data)
-                if creation_status is 1:
+                if creation_status == 1:
                     print("Account created successfully...")
                     time.sleep(3.0)
                     continue
@@ -103,7 +103,7 @@ def _display_main()->None:
                         "user_name"           : user_name,
                         "gender"              : gender,
                         "address"             : address,
-                        "phone_number"        : phone_number,
+                        "phone_number"        : phone_numgber,
                         "email"               : email,
                         "aadhar_number"       : aadhar_number,
                         "debit_account_number": debit_account_number
