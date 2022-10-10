@@ -79,39 +79,27 @@ def _display_main()->None:
                     time.sleep(3.0)
                     continue
             elif user_choice == 2:
-                import mysql.connector
-
-                try:
-                    conn = mysql.connector.connect(host='localhost',
-                                                database='boi',
-                                                user='root',
-                                                password='password')
-
-                    conn.autocommit = False
-                    cursor = conn.cursor()
-                    # withdraw from account A 
-                    sql_update_query = """Update account_A set balance = 1000 where debit_account_number = 1131201234567890"""
-                    cursor.execute(sql_update_query)
-
-                    # Deposit to account B 
-                    sql_update_query = """Update account_B set balance = 1500 where debit_account_number = 1131201254567870"""
-                    cursor.execute(sql_update_query)
-                    print("Record Updated successfully ")
-
-                    # Commit your changes
-                    conn.commit()
-
-                except mysql.connector.Error as error:
-                    print("Failed to update record to database rollback: {}".format(error))
-                    # reverting changes because of exception
-                    conn.rollback()
-                finally:
-                    # closing database connection.
-                    if conn.is_connected():
-                        cursor.close()
-                        conn.close()
-                        print("connection is closed")
-
+                sender_acc_number = int(input("Enter your account number:"))
+                receiver_acc_number = int(input("Enter Receiver account number:"))
+                is_sender, sender_detail, password_match= search_account_info(sender_acc_number)
+                is_receiver, receiver_detail, password_match= search_account_info(receiver_acc_number)
+                if is_sender is True and is_receiver is True:
+                    t_amount = int(input("Enter the amount:"))
+                    # TODO: check algorithm from step 4 till end.
+                else:
+                    if is_receiver is False and is_sender is True:
+                         print(f"The Account:{receiver_acc_number} is not found to be exists...")
+                         time.sleep(3.0)
+                         continue
+                    elif is_receiver is True and is_sender is False:
+                         print(f"The Account:{search_account_info} is not found to be exists...")
+                         time.sleep(3.0)
+                         continue
+                    else:
+                        print("Both the accounts doesn't exists..")
+                        time.sleep(3.0)
+                        continue
+                
             # Update an Acccount Information.
             elif user_choice == 3:
                 debit_account_number = int(input("Enter Account number: "))
@@ -224,3 +212,4 @@ Account balance       : Rs.{customer[10]}/-
 
 if __name__ == "__main__":
     _display_main()
+    
