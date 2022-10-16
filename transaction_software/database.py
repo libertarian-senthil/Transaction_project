@@ -13,7 +13,7 @@ from mysql.connector.errors import (DatabaseError, IntegrityError,
 from utils.generate_rand_num import generate_account_number
 from utils.sql_statements import (INSERT_CUSTOMER, REMOVE_ACC, SEARCH_ACC,
                                   SEARCH_ACC_WITH_UPI, SELECT_ALL_CUSOMTERS,
-                                  UPDATE_ACC, UPDATE_AMT,INSERT_TRANS_DATA  )
+                                  UPDATE_ACC, UPDATE_AMT,INSERT_TRANS_DATA, TURN_OFF_FK, TURN_ON_FK, INSERT_DELETED_CUSTOMER)
 
 # Get the database username and password stored in the environment variables.
 DB_USER = os.getenv('DB_USER')
@@ -27,7 +27,7 @@ def check_if_mysql_is_installed() -> bool:
     Returns:
         bool: True if installed else false.
     """
-    if os.system("mysql --version") == 1:
+    if os.system("mysql --version") == 1: # nosec B605 B607
         print("Mysql is not installed on your system!")
         return False
     else:
@@ -88,10 +88,10 @@ def search_account_info(debit_account_number, upi_password=None, upi_match=False
 
 
     Returns:
-        tuple[bool,list,int]: tuple of bool,list and bool.
+        tuple(bool,list,int): tuple of bool,list and bool.
             bool =  account found(True) or not found(False).
             list = represent the customer details.
-            int = represent whether the given upi_password is a match(1) ot not(0). if upi_match is set to None then (-1).
+            int = represent whether the given upi_password is a match(1) or not(0). if upi_match is set to None then (-1).
                 codes:
                     code 1 = found a match.
                     code 0 = not found a match.
@@ -167,14 +167,14 @@ def perform_transaction(**kwargs) -> int:
         kwargs (dict) : contains sender_balance, t_amount, sender_acc_number, receiver_balance, receiver_account_number, trans_id.
 
     Returns:
-        int : 0 or 1 
+        int : 0 or 1
             0 = Transaction unsuccessfull
             1 = Transaction Successful
     """
     try:
         data = kwargs
         connection = connect_to_database()
-        cursor = connection.cursor()
+        cursor = connection.cursor()  # type: ignore
         # reduce sender balance amount.
         bal= data['sender_balance'] - data['t_amount']
         s_acc_num = data['sender_acc_number']
@@ -185,19 +185,15 @@ def perform_transaction(**kwargs) -> int:
         cursor.execute(UPDATE_AMT,[bal,r_acc_num])
         # inserting transaction details to transaction table.
         val = [data['trans_id'], data['sender_acc_number'], data['receiver_acc_number'], data['t_amount'] ]
-        cursor.execut(INSERT_TRANS_DATA, val)
-        connection.commit()
-        connection.close()
+        cursor.execute(INSERT_TRANS_DATA, val)
+        connection.commit()  # type: ignore
+        connection.close()  # type: ignore
         return 1
 
     except  Exception as e:
         return 0
 
-
-
 # delete an account information.
-
-
 def remove_account(debit_account_number: int, upi_password: str):  # type: ignore
     """Remove an account
 
@@ -213,7 +209,13 @@ def remove_account(debit_account_number: int, upi_password: str):  # type: ignor
         connection = connect_to_database()
         cursor = connection.cursor()  # type:ignore
         val = [debit_account_number, upi_password]
-        cursor.execute(REMOVE_ACC, val)
+        customer_found, customer, password_match_code = search_account_info(
+            debit_account_number, upi_match=True, upi_password=upi_password)  # type: ignore
+        if password_match_code == 1:
+            cursor.execute(INSERT_DELETED_CUSTOMER, customer)
+        cursor.execute(TURN_OFF_FK) # Turns off the foreign key check.
+        cursor.execute(REMOVE_ACC, val) # removes the account.
+        cursor.execute(TURN_ON_FK) # Turns on the foreign key check.
         customer_found, customer, password_match_code = search_account_info(
             debit_account_number, upi_match=True, upi_password=upi_password)  # type: ignore
         connection.commit()  # type:ignore
