@@ -3,6 +3,7 @@ This module generates random account number and transaction id.
 """
 import random
 import math
+import datetime
 
 def generate_account_number()->int:
     """
@@ -13,11 +14,13 @@ def generate_account_number()->int:
 
 def generate_trans_id()->int:
     """
-    Return a random transaction number. with that 13_07_67_43_68_000 transaction id's can be created.
+    Return a random transaction number.
     """
-    return random.randint(0, math.factorial(15))
+    t_id = random.randint(0,9999)
+    ct = datetime.datetime.now()
+    return int(str(int(ct.timestamp())) + str(t_id))
 
 # drive code
 if __name__ == "__main__":
-    acc = generate_account_number()
+    acc = generate_trans_id()
     print()

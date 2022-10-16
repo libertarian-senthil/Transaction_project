@@ -11,3 +11,5 @@ REMOVE_ACC = "DELETE FROM customer where debit_account_number = %s and upi_passw
 SEARCH_ACC = "SELECT * FROM customer where debit_account_number = %s"
 SEARCH_ACC_WITH_UPI = "SELECT * FROM customer where debit_account_number = %s and upi_password = %s"
 UPDATE_ACC = "UPDATE customer SET user_name = %s, gender = %s, address = %s, phone_number = %s, email =  %s, aadhar_number =%s where debit_account_number = %s"
+UPDATE_AMT = "UPDATE customer SET balance = %s where debit_account_number = %s"
+INSERT_TRANS_DATA = "INSERT INTO transaction_table(trans_id, debit_account_number ,credit_account_number, trans_amt) values (%s, %s, %s, %s)"
