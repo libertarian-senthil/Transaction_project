@@ -1,7 +1,7 @@
 # local system files
 .venv
 private
-mysql
+mysql/_*.*
 logs
 .vscode
 DOCS/_*.md
