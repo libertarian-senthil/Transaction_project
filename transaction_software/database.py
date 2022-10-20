@@ -224,7 +224,8 @@ def remove_account(debit_account_number: int, upi_password: str):  # type: ignor
             return (False, 0)
         elif password_match_code == 1:
             return (True, 1)
-    except:
+    except Exception as e:
+        print(e)
         return (False, -1)
 
 # def View customer list.
