@@ -1,0 +1,50 @@
+body{
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    background-color: black;
+
+}
+.container{
+    margin: auto;
+
+}
+button{
+    padding: 18px 60px;
+    margin: 20px;
+    font-size: 0.8em;
+    font-family: sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: .4s ease-in;
+}
+.btn_1:hover{
+    background-color: yellow;
+    box-shadow: 0px 0px 5px yellow, 0px 0px 25px yellow, 0px 0px 50px yellow, 0px 0px 200px yellow;
+}
+.btn_2:hover{
+    background-color: yellow;
+    box-shadow: 0px 0px 5px yellow, 0px 0px 25px yellow, 0px 0px 50px yellow, 0px 0px 200px yellow;
+}
+.btn_3:hover{
+    background-color: yellow;
+    box-shadow: 0px 0px 5px yellow, 0px 0px 25px yellow, 0px 0px 50px yellow, 0px 0px 200px yellow;
+}
+.btn_4:hover{
+    background-color: yellow;
+    box-shadow: 0px 0px 5px yellow, 0px 0px 25px yellow, 0px 0px 50px yellow, 0px 0px 200px yellow;
+}
+.btn_5:hover{
+    background-color: yellow;
+    box-shadow: 0px 0px 5px yellow, 0px 0px 25px yellow, 0px 0px 50px yellow, 0px 0px 200px yellow;
+}
+.btn_6:hover{
+    background-color: yellow;
+    box-shadow: 0px 0px 5px yellow, 0px 0px 25px yellow, 0px 0px 50px yellow, 0px 0px 200px yellow;
+}
+.btn_7:hover{
+    background-color: yellow;
+    box-shadow: 0px 0px 5px yellow, 0px 0px 25px yellow, 0px 0px 50px yellow, 0px 0px 200px yellow;
+}
