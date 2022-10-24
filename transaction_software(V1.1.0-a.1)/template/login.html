@@ -1,37 +1,71 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-   <head>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta charset="utf-8">
-      <title>Login Page</title>
-      <!-- #6 issue resolved -->
-      <link rel="stylesheet" href="../static/login_design.css">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
-   </head>
-   <body>
-      <div class="center">
-         <!-- <input type="checkbox" id="show">
-         <label for="show" class="show-btn">Bank Of Indians</label> -->
-         <div class="container">
-            <!-- <label for="show" class="close-btn fas fa-times" title="close"></label> -->
-            <div class="text">
-               Login Form
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="..\static\login_design.css">
+    <!---we had linked our css file----->
+</head>
+<body>
+    <div class="full-page">
+        <div class="navbar">
+            <div>
+                <a href='website.html'>Bank Of Indians</a>
             </div>
-            <form action="#">
-               <div class="data">
-                  <label for="email-id">Email</label>
-                  <input  id="email-id"type="text" required>
-               </div>
-               <div class="data">
-                  <label for="password">Password</label>
-                  <input id="password" type="password" required>
-               </div>
-               <div class="btn">
-                  <div class="inner"></div>
-                  <button type="submit">login</button>
-               </div>
-            </form>
-         </div>
-      </div>
-   </body>
+            <nav>
+                <ul id='MenuItems'>
+                    <li><button class='loginbtn' onclick="document.getElementById('login-form').style.display='block'" style="width:auto;">Login</button></li>
+                </ul>
+            </nav>
+        </div>
+        <div id='login-form'class='login-page'>
+            <div class="form-box">
+                <div class='button-box'>
+                    <div id='btn'></div>
+                    <button type='button'onclick='login()'class='toggle-btn'>User</button>
+                    <button type='button'onclick='register()'class='toggle-btn'>Admin</button>
+                </div>
+                <form id='login' class='input-group-login'>
+                    <input type='text'class='input-field'placeholder='Account No' required >
+		    <input type='password'class='input-field'placeholder='Enter UPI Password' required>
+		    <input type='checkbox'class='check-box'><span>Remember Password</span>
+		    <button type='submit'class='submit-btn'>Log in</button>
+		 </form>
+		 <form id='register' class='input-group-register'>
+         <input type='text'class='input-field'placeholder='Account No' required >
+         <input type='password'class='input-field'placeholder='Enter UPI Password' required>
+         <input type='checkbox'class='check-box'><span>Remember Password</span>
+         <button type='submit'class='submit-btn'>Log in</button>
+	         </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        var x=document.getElementById('login');
+		var y=document.getElementById('register');
+		var z=document.getElementById('btn');
+		function register()
+		{
+			x.style.left='-400px';
+			y.style.left='50px';
+			z.style.left='110px';
+		}
+		function login()
+		{
+			x.style.left='50px';
+			y.style.left='450px';
+			z.style.left='0px';
+		}
+	</script>
+	<script>
+        var modal = document.getElementById('login-form');
+        window.onclick = function(event) 
+        {
+            if (event.target == modal) 
+            {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</body>
 </html>
