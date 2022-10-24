@@ -2,10 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="..\static\login_design.css">
+    <script src="../static/login.js"></script>
+    <title>Login</title>
     <!---we had linked our css file----->
 </head>
+
 <body>
     <div class="full-page">
         <div class="navbar">
@@ -14,7 +17,9 @@
             </div>
             <nav>
                 <ul id='MenuItems'>
-                    <li><button class='loginbtn' onclick="document.getElementById('login-form').style.display='block'" style="width:auto;">Login</button></li>
+                    <li>
+                        <button class='loginbtn' onclick="loginButton()">Login</button>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -27,16 +32,16 @@
                 </div>
                 <form id='login' class='input-group-login'>
                     <input type='text'class='input-field'placeholder='Account No' required >
-		    <input type='password'class='input-field'placeholder='Enter UPI Password' required>
-		    <input type='checkbox'class='check-box'><span>Remember Password</span>
-		    <button type='submit'class='submit-btn'>Log in</button>
-		 </form>
-		 <form id='register' class='input-group-register'>
-         <input type='text'class='input-field'placeholder='Account No' required >
-         <input type='password'class='input-field'placeholder='Enter UPI Password' required>
-         <input type='checkbox'class='check-box'><span>Remember Password</span>
-         <button type='submit'class='submit-btn'>Log in</button>
-	         </form>
+        		    <input type='password'class='input-field'placeholder='Enter UPI Password' required>
+                <!-- <input type='checkbox'class='check-box'><span>Remember Password</span> -->
+		            <button type='submit'class='submit-btn'>Log in</button>
+		        </form>
+		        <form id='register' class='input-group-register'>
+                    <input type='text'class='input-field'placeholder='Account No' required >
+                    <input type='password'class='input-field'placeholder='Enter UPI Password' required>
+                    <!-- <input type='checkbox'class='check-box'><span>Remember Password</span> -->
+                    <button type='submit'class='submit-btn'>Log in</button>
+                </form>
             </div>
         </div>
     </div>
@@ -59,9 +64,9 @@
 	</script>
 	<script>
         var modal = document.getElementById('login-form');
-        window.onclick = function(event) 
+        window.onclick = function(event)
         {
-            if (event.target == modal) 
+            if (event.target == modal)
             {
                 modal.style.display = "none";
             }

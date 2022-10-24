@@ -27,7 +27,7 @@ nav
     flex: 1;
     text-align: right;
 }
-nav ul 
+nav ul
 {
     display: inline-block;
     list-style: none;
@@ -176,4 +176,8 @@ span
 {
 	color:black;
 	font-size: 15;
+}
+
+.loginbtn{
+	width:auto;
 }
